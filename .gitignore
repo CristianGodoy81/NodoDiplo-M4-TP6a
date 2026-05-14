@@ -1,0 +1,52 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Archivos de runtime
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage / testing
+coverage/
+.nyc_output/
+
+# Build / compilados
+dist/
+build/
+
+# Cache
+.cache/
+.eslintcache
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Docker (si no lo usás)
+docker-compose.override.yml
+
+# Archivos temporales
+tmp/
+temp/
+
+# Archivos de debugging
+*.tgz
+*.swp
