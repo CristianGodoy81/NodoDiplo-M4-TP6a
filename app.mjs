@@ -5,6 +5,7 @@ import { connectDB } from "./src/config/db.mjs";
 import authRoutes from "./src/routes/authRoutes.mjs";
 import profileRoutes from "./src/routes/profileRoutes.mjs";
 import movieRoutes from "./src/routes/movieRoutes.mjs";
+import watchlistRoutes from "./src/routes/watchlistRoutes.mjs";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/profiles", profileRoutes);
 app.use("/api/movies", movieRoutes);
+app.use("/api/watchlist", watchlistRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
