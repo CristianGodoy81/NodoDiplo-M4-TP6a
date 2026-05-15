@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./src/config/db.mjs";
 import authRoutes from "./src/routes/authRoutes.mjs";
+import profileRoutes from "./src/routes/profileRoutes.mjs";
 
 dotenv.config();
 
@@ -15,11 +16,12 @@ app.use(express.json());
 // Conexión DB
 connectDB();
 
-// Ruta de prueba
+// Rutas
 app.get("/", (req, res) => {
   res.send("API Nodo Cine funcionando");
 });
 app.use("/api/auth", authRoutes);
+app.use("/api/profiles", profileRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
