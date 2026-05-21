@@ -1,5 +1,95 @@
 import Movie from "../models/Movie.mjs";
 import Profile from "../models/Profile.mjs";
+import axios from "axios";
+
+export const getTrailer = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const movie = await Movie.findById(id);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    const apiKey = process.env.TMDB_API_KEY;
+
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${movie.tmdbId}/videos?api_key=${apiKey}`
+    );
+
+    const videos = response.data.results;
+
+    const trailer = videos.find(
+      (v) => v.type === "Trailer" && v.site === "YouTube"
+    );
+
+    if (!trailer) {
+      return res.json({ trailer: null });
+    }
+
+    const url = `https://www.youtube.com/watch?v=${trailer.key}`;
+
+    res.json({ trailer: url });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching trailer", error });
+  }
+};
+
+// IMPORTAR PELÍCULAS DESDE TMDB
+export const importMovies = async (req, res) => {
+  try {
+    const apiKey = process.env.TMDB_API_KEY;
+
+    // 1. Obtener géneros
+    const genreRes = await axios.get(
+      `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`
+    );
+
+    const genreMap = {};
+    genreRes.data.genres.forEach((g) => {
+      genreMap[g.id] = g.name;
+    });
+
+    // 2. Obtener películas
+    const movieRes = await axios.get(
+      `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`
+    );
+
+    const movies = movieRes.data.results;
+
+    // 3. Transformar datos
+    const formattedMovies = movies.map((m) => ({
+      title: m.title,
+      synopsis: m.overview,
+      category: m.genre_ids.map((id) => genreMap[id]),// array de géneros
+      ageRating: m.adult ? 18 : 13,// lógica de edad
+      image: `https://image.tmdb.org/t/p/w500${m.poster_path}`,
+      tmdbId: m.id,
+      rating: m.vote_average
+    }));
+
+    // 4. Evitar duplicados
+    const existing = await Movie.find({
+      tmdbId: { $in: formattedMovies.map((m) => m.tmdbId) }
+    });
+
+    const existingIds = existing.map((m) => m.tmdbId);
+
+    const newMovies = formattedMovies.filter(
+      (m) => !existingIds.includes(m.tmdbId)
+    );
+
+    await Movie.insertMany(newMovies);
+
+    res.json({
+      message: "Movies imported",
+      added: newMovies.length
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error importing movies", error });
+  }
+};
 
 // GET MOVIES (con filtros + restricción por perfil)
 export const getMovies = async (req, res) => {
@@ -27,7 +117,7 @@ export const getMovies = async (req, res) => {
 
     // filtro por categoría
     if (category) {
-      filters.category = category;
+      filters.category = { $in: [category] };
     }
 
     // filtro por nombre (búsqueda parcial)

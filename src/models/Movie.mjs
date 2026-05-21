@@ -11,11 +11,11 @@ const movieSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    category: {
-      type: String,
-      required: true,
-      trim: true
-    },
+    category: [
+      {
+        type: String
+      }
+    ],
     ageRating: {
       type: Number,
       required: true
@@ -24,9 +24,12 @@ const movieSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    trailer: {
-      type: String,
-      required: true
+    tmdbId: {
+      type: Number,
+      unique: true
+    },
+    rating: {
+      type: Number
     }
   },
   { timestamps: true }
