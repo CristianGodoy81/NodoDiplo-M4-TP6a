@@ -1,5 +1,6 @@
 import Movie from "../models/Movie.mjs";
 import Profile from "../models/Profile.mjs";
+import Watchlist from "../models/Watchlist.mjs";
 import axios from "axios";
 
 export const getTrailer = async (req, res) => {
@@ -10,6 +11,10 @@ export const getTrailer = async (req, res) => {
 
     if (!movie) {
       return res.status(404).json({ message: "Movie not found" });
+    }
+
+    if (!movie.tmdbId) {
+      return res.json({ trailer: null });
     }
 
     const apiKey = process.env.TMDB_API_KEY;
@@ -182,6 +187,8 @@ export const deleteMovie = async (req, res) => {
     if (!deletedMovie) {
       return res.status(404).json({ message: "Movie not found" });
     }
+
+    await Watchlist.deleteMany({ movie: id });
 
     res.json({ message: "Movie deleted" });
   } catch (error) {

@@ -26,7 +26,8 @@ const movieSchema = new mongoose.Schema(
     },
     tmdbId: {
       type: Number,
-      unique: true
+      unique: true,
+      sparse: true
     },
     rating: {
       type: Number
