@@ -3,6 +3,7 @@ import {
   getTrailer,
   importMovies,
   getMovies,
+  getMovieById,
   createMovie,
   updateMovie,
   deleteMovie
@@ -17,6 +18,7 @@ router.use(authMiddleware);
 
 // Públicas para usuarios logueados
 router.get("/", getMovies);
+router.get("/:id", getMovieById);
 router.get("/:id/trailer", getTrailer);
 
 // Solo admin

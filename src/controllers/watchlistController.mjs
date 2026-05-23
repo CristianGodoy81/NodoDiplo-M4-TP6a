@@ -25,8 +25,8 @@ export const addToWatchlist = async (req, res) => {
       return res.status(404).json({ message: "Movie not found" });
     }
 
-    // Restricción por edad (CLAVE)
-    if (profile.type === "child" && movie.ageRating > 13) {
+    // Restricción por edad
+    if (profile.isKid && movie.ageRating > 13) {
       return res.status(403).json({
         message: "This profile cannot access this content"
       });

@@ -130,8 +130,8 @@ export const getMovies = async (req, res) => {
       filters.title = { $regex: name, $options: "i" };
     }
 
-    // 4. Filtro por edad (CLAVE)
-    if (profile.type === "child") {
+    // 4. Filtro por edad
+    if (profile.isKid) {
       filters.ageRating = { $lte: 13 };
     }
 
@@ -141,6 +141,22 @@ export const getMovies = async (req, res) => {
     res.json(movies);
   } catch (error) {
     res.status(500).json({ message: "Error fetching movies", error });
+  }
+};
+
+// GET MOVIE (para el detalle)
+export const getMovieById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const movie = await Movie.findById(id);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Película no encontrada" });
+    }
+
+    res.json(movie);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener la película detallada", error: error.message });
   }
 };
 

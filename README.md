@@ -56,6 +56,7 @@ La API cuenta con los siguientes recursos principales:
 ### Películas (`/api/movies`)
 *(Requiere Autenticación)*
 * `GET /` - Obtiene todas las películas del catálogo.
+* `GET /:id` - Obtiene una película del catálogo.
 * `GET /:id/trailer` - Obtiene el trailer de una película.
 
 *(Solo Administradores)*

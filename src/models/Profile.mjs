@@ -7,9 +7,9 @@ const profileSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
-    type: {
-      type: String,
-      enum: ["adult", "child"],
+    isKid: {
+      type: Boolean,
+      default: false,
       required: true
     },
     user: {

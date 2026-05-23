@@ -4,11 +4,11 @@ import Profile from "../models/Profile.mjs";
 export const createProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { name, type } = req.body;
+    const { name, isKid } = req.body;
 
     const newProfile = new Profile({
       name,
-      type,
+      isKid,
       user: userId
     });
 
@@ -46,7 +46,7 @@ export const updateProfile = async (req, res) => {
     }
 
     profile.name = req.body.name ?? profile.name;
-    profile.type = req.body.type ?? profile.type;
+    profile.isKid = req.body.isKid ?? profile.isKid;
 
     await profile.save();
 
