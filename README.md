@@ -1,3 +1,5 @@
+# Render URL: https://nododiplo-m4-tp6a.onrender.com
+
 # API Nodo Cine
 
 API RESTful para la gestión de una plataforma de películas. Proporciona autenticación, gestión de perfiles de usuario, catálogo de películas con roles de administrador y listas de seguimiento (Watchlist) por perfil.
